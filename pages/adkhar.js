@@ -61,20 +61,18 @@ export default function Adkhar() {
             ))}
           </div>
 
-          {/* Banner placeholder */}
+          {/* Banner using app logo as background */}
           <div style={{
             width: '100%',
             height: '360px',
-            background: 'linear-gradient(135deg, #0d1a12 0%, #1a4a2a 100%)',
+            backgroundImage: 'url(/deen-adkar-logo.png)',
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
             borderRadius: '12px',
             border: '1px solid var(--border)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             marginBottom: '64px',
-            fontSize: '64px',
           }}>
-            🕌
           </div>
 
           {/* Content */}
