@@ -258,7 +258,7 @@ function ProjectCard({ project, index }) {
                 marginTop: '2px',
               }}
             >
-              ->
+              &rarr;
             </div>
           </div>
 
@@ -274,7 +274,7 @@ function ProjectCard({ project, index }) {
               }}
             >
               View app details
-              <span>-></span>
+              <span>&rarr;</span>
             </div>
           )}
 
@@ -342,7 +342,7 @@ function ProjectCard({ project, index }) {
                   e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
                 }}
               >
-                GitHub ->
+                GitHub &rarr;
               </a>
             )}
             {!project.playStore && !project.github && (
