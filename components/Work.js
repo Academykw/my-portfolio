@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 const projects = [
   {
@@ -10,6 +10,7 @@ const projects = [
     desc: 'A beautifully designed Islamic dhikr and remembrance app built with Flutter. Elegant UI, offline support, and a seamless spiritual experience.',
     href: '/adkhar',
     playStore: 'https://play.google.com/store/apps/details?id=com.deen.adkhar',
+    image: 'https://play-lh.googleusercontent.com/6eaRLneC5hyk5AIGRThQ0oDEUaye27MA9a_NTg0LUmKbPMeY_1MtIYv35lKDPA1FXcqRe2M4He_nKaHD9cFP=w480-h960',
     bg: '#0d1a12',
     accent: '#1a4a2a',
   },
@@ -17,10 +18,11 @@ const projects = [
     num: '02',
     category: 'Flutter / Real-Time Communication',
     title: 'Telex',
-    role: 'Flutter Mobile App Developer — Emerj LLC',
+    role: 'Flutter Mobile App Developer - Emerj LLC',
     desc: 'A real-time team communication platform built with Flutter and Dart. High-performance Chat UI with smooth scrolling and lazy loading for thousands of messages.',
     href: '/telex',
     playStore: 'https://play.google.com/store/apps/details?id=net.emerj.telex',
+    image: 'https://play-lh.googleusercontent.com/xUdG-1KO1TWU8tOkVLftex5pYEVGk59_LsAiQXx4zYHDeuvDcIRXbOL3j0etiiW9iWhfivGmkAUx54HH8f-A=w480-h960',
     bg: '#0d1520',
     accent: '#1a2d4a',
   },
@@ -51,127 +53,248 @@ const projects = [
 
 function ProjectCard({ project, index }) {
   const cardRef = useRef(null)
+  const router = useRouter()
+
+  const openProject = () => {
+    if (project.href) router.push(project.href)
+  }
+
+  const handleKeyDown = e => {
+    if (!project.href) return
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      openProject()
+    }
+  }
 
   return (
     <div ref={cardRef} className="reveal" style={{ transitionDelay: `${index * 80}ms` }}>
       <div
+        role={project.href ? 'link' : undefined}
+        tabIndex={project.href ? 0 : undefined}
         style={{
           position: 'relative',
           borderRadius: 'var(--radius)',
           overflow: 'hidden',
           border: '1px solid var(--border)',
           transition: 'border-color 0.3s, transform 0.3s',
-          cursor: 'pointer',
+          cursor: project.href ? 'pointer' : 'default',
           background: project.bg,
+          outline: 'none',
         }}
+        onClick={openProject}
+        onKeyDown={handleKeyDown}
         onMouseEnter={e => {
           e.currentTarget.style.borderColor = '#333'
-          e.currentTarget.style.transform = 'translateY(-2px)'
+          if (project.href) e.currentTarget.style.transform = 'translateY(-2px)'
         }}
         onMouseLeave={e => {
           e.currentTarget.style.borderColor = 'var(--border)'
           e.currentTarget.style.transform = 'none'
         }}
+        onFocus={e => {
+          if (project.href) e.currentTarget.style.borderColor = '#555'
+        }}
+        onBlur={e => {
+          e.currentTarget.style.borderColor = 'var(--border)'
+        }}
       >
-        {/* Visual area */}
-        <div style={{
-          height: '220px',
-          background: `linear-gradient(135deg, ${project.bg} 0%, ${project.accent} 100%)`,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          overflow: 'hidden',
-        }}>
-          {/* Decorative circles */}
-          <div style={{
-            position: 'absolute',
-            width: '200px', height: '200px',
-            borderRadius: '50%',
-            border: '1px solid rgba(255,255,255,0.05)',
-            top: '-40px', right: '-40px',
-          }} />
-          <div style={{
-            position: 'absolute',
-            width: '120px', height: '120px',
-            borderRadius: '50%',
-            border: '1px solid rgba(255,255,255,0.04)',
-            bottom: '-20px', left: '20px',
-          }} />
-          {/* App icon placeholder */}
-          <div style={{
-            width: '64px', height: '64px',
-            borderRadius: '16px',
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.08)',
+        <div
+          style={{
+            height: '220px',
+            background: `linear-gradient(135deg, ${project.bg} 0%, ${project.accent} 100%)`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontSize: '28px',
-          }}>
-            {project.num === '01' ? '🕌' : project.num === '02' ? '💬' : project.num === '03' ? '📱' : '⚙️'}
-          </div>
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              width: '200px',
+              height: '200px',
+              borderRadius: '50%',
+              border: '1px solid rgba(255,255,255,0.05)',
+              top: '-40px',
+              right: '-40px',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              width: '120px',
+              height: '120px',
+              borderRadius: '50%',
+              border: '1px solid rgba(255,255,255,0.04)',
+              bottom: '-20px',
+              left: '20px',
+            }}
+          />
+
+          {project.image ? (
+            <>
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(180deg, rgba(8,8,8,0.08) 0%, rgba(8,8,8,0.34) 100%)',
+                  zIndex: 1,
+                }}
+              />
+              <img
+                src={project.image}
+                alt={`${project.title} Play Store preview`}
+                style={{
+                  position: 'relative',
+                  zIndex: 2,
+                  height: '196px',
+                  width: 'auto',
+                  objectFit: 'contain',
+                  filter: 'drop-shadow(0 24px 30px rgba(0,0,0,0.35))',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '14px',
+                  left: '14px',
+                  zIndex: 3,
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: 'rgba(255,255,255,0.88)',
+                  background: 'rgba(7,7,7,0.42)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  borderRadius: '999px',
+                  padding: '7px 10px',
+                  backdropFilter: 'blur(10px)',
+                }}
+              >
+                Play Store
+              </div>
+            </>
+          ) : (
+            <div
+              style={{
+                minWidth: '120px',
+                minHeight: '120px',
+                padding: '18px',
+                borderRadius: '24px',
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.08)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                textAlign: 'center',
+                fontSize: '20px',
+                fontWeight: 600,
+                color: 'rgba(255,255,255,0.88)',
+                letterSpacing: '-0.02em',
+              }}
+            >
+              {project.num === '03' ? 'More Projects' : 'GitHub'}
+            </div>
+          )}
         </div>
 
-        {/* Card content */}
         <div style={{ padding: '24px' }}>
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            marginBottom: '12px',
-          }}>
-            <div>
-              <div style={{
-                fontSize: '11px',
-                color: 'var(--text-muted)',
-                letterSpacing: '0.08em',
-                marginBottom: '6px',
-                textTransform: 'uppercase',
-                fontWeight: 500,
-              }}>
-                {project.num} — {project.category}
-              </div>
-              <h3 style={{
-                fontSize: '18px',
-                fontWeight: 600,
-                color: 'var(--text)',
-                letterSpacing: '-0.02em',
-                marginBottom: '2px',
-              }}>{project.title}</h3>
-              <div style={{
-                fontSize: '12px',
-                color: 'var(--text-secondary)',
-                fontWeight: 400,
-              }}>{project.role}</div>
-            </div>
-            {/* Arrow */}
-            <div style={{
-              width: '32px', height: '32px',
-              borderRadius: '50%',
-              border: '1px solid var(--border)',
+          <div
+            style={{
               display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '13px',
-              color: 'var(--text-secondary)',
-              flexShrink: 0,
-              marginTop: '2px',
-            }}>↗</div>
+              justifyContent: 'space-between',
+              alignItems: 'flex-start',
+              marginBottom: '12px',
+            }}
+          >
+            <div>
+              <div
+                style={{
+                  fontSize: '11px',
+                  color: 'var(--text-muted)',
+                  letterSpacing: '0.08em',
+                  marginBottom: '6px',
+                  textTransform: 'uppercase',
+                  fontWeight: 500,
+                }}
+              >
+                {project.num} - {project.category}
+              </div>
+              <h3
+                style={{
+                  fontSize: '18px',
+                  fontWeight: 600,
+                  color: 'var(--text)',
+                  letterSpacing: '-0.02em',
+                  marginBottom: '2px',
+                }}
+              >
+                {project.title}
+              </h3>
+              <div
+                style={{
+                  fontSize: '12px',
+                  color: 'var(--text-secondary)',
+                  fontWeight: 400,
+                }}
+              >
+                {project.role}
+              </div>
+            </div>
+            <div
+              style={{
+                width: '32px',
+                height: '32px',
+                borderRadius: '50%',
+                border: '1px solid var(--border)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '13px',
+                color: 'var(--text-secondary)',
+                flexShrink: 0,
+                marginTop: '2px',
+              }}
+            >
+              ->
+            </div>
           </div>
 
-          <p style={{
-            fontSize: '13px',
-            color: 'var(--text-muted)',
-            lineHeight: 1.65,
-            marginBottom: '20px',
-          }}>{project.desc}</p>
+          {project.href && (
+            <div
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '6px',
+                marginBottom: '14px',
+                fontSize: '12px',
+                color: 'var(--text-secondary)',
+              }}
+            >
+              View app details
+              <span>-></span>
+            </div>
+          )}
+
+          <p
+            style={{
+              fontSize: '13px',
+              color: 'var(--text-muted)',
+              lineHeight: 1.65,
+              marginBottom: '20px',
+            }}
+          >
+            {project.desc}
+          </p>
 
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
             {project.playStore && (
               <a
                 href={project.playStore}
-                target="_blank" rel="noreferrer"
+                target="_blank"
+                rel="noreferrer"
                 onClick={e => e.stopPropagation()}
                 style={{
                   fontSize: '12px',
@@ -186,16 +309,21 @@ function ProjectCard({ project, index }) {
                   alignItems: 'center',
                   gap: '4px',
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+                }}
               >
-                ▶ Play Store
+                Play Store
               </a>
             )}
             {project.github && (
               <a
                 href={project.github}
-                target="_blank" rel="noreferrer"
+                target="_blank"
+                rel="noreferrer"
                 onClick={e => e.stopPropagation()}
                 style={{
                   fontSize: '12px',
@@ -207,18 +335,26 @@ function ProjectCard({ project, index }) {
                   borderRadius: '6px',
                   transition: 'background 0.2s',
                 }}
-                onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.06)'}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.1)'
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = 'rgba(255,255,255,0.06)'
+                }}
               >
-                GitHub ↗
+                GitHub ->
               </a>
             )}
             {!project.playStore && !project.github && (
-              <span style={{
-                fontSize: '12px',
-                color: 'var(--text-muted)',
-                padding: '6px 0',
-              }}>Available on request</span>
+              <span
+                style={{
+                  fontSize: '12px',
+                  color: 'var(--text-muted)',
+                  padding: '6px 0',
+                }}
+              >
+                Available on request
+              </span>
             )}
           </div>
         </div>
@@ -231,37 +367,48 @@ export default function Work() {
   const sectionRef = useRef(null)
 
   useEffect(() => {
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'))
-        }
-      })
-    }, { threshold: 0.05 })
+    const obs = new IntersectionObserver(
+      entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.querySelectorAll('.reveal').forEach(el => el.classList.add('in-view'))
+          }
+        })
+      },
+      { threshold: 0.05 }
+    )
+
     if (sectionRef.current) obs.observe(sectionRef.current)
+
     return () => obs.disconnect()
   }, [])
 
   return (
     <section id="work" ref={sectionRef} style={{ padding: '120px 0', background: 'var(--bg)' }}>
       <div className="section">
-        <h2 className="reveal" style={{
-          fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
-          fontWeight: 700,
-          letterSpacing: '-0.03em',
-          color: 'var(--text)',
-          marginBottom: '48px',
-        }}>
+        <h2
+          className="reveal"
+          style={{
+            fontSize: 'clamp(1.8rem, 4vw, 2.8rem)',
+            fontWeight: 700,
+            letterSpacing: '-0.03em',
+            color: 'var(--text)',
+            marginBottom: '48px',
+          }}
+        >
           Selected Work
         </h2>
 
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '16px',
-        }} className="work-grid">
-          {projects.map((p, i) => (
-            <ProjectCard key={i} project={p} index={i} />
+        <div
+          className="work-grid"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '16px',
+          }}
+        >
+          {projects.map((project, index) => (
+            <ProjectCard key={project.num} project={project} index={index} />
           ))}
         </div>
       </div>
