@@ -2,6 +2,12 @@ import Head from 'next/head'
 import Link from 'next/link'
 
 export default function Telex() {
+  const screenshots = [
+    'https://play-lh.googleusercontent.com/YUkg0IyH9Wm6tjguqsTpGiyFlVIjQJjQ48CcxRSZzbsJjAUUgvkX4a45uj01a8GhMfrhvdg9U_7pbfPZ7uLF3g=w526-h296',
+    'https://play-lh.googleusercontent.com/YODySnQZLGDNzqUpqplGc6YG_kugMp-S-azhEunyhpnBpk2AfWQYCnCaXWdc3_aHga6bzfN8eftjhrx3c2I-gA=w526-h296',
+    'https://play-lh.googleusercontent.com/4yHqhPPowyiDHhPU9fWlvjxwShQVnTpmkWJYPivJAa6F8wBKFMGsFcZv6aexL95ihi1tOy_P2G39vJ52l8je7g=w526-h296',
+  ]
+
   return (
     <>
       <Head>
@@ -53,17 +59,53 @@ export default function Telex() {
             ))}
           </div>
 
-          <div style={{
-            width: '100%', height: '360px',
-            background: 'linear-gradient(135deg, #0d1520 0%, #1a2d4a 100%)',
-            borderRadius: '12px',
-            border: '1px solid var(--border)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '64px',
-            fontSize: '64px',
-          }}>💬</div>
+          <div
+            style={{
+              width: '100%',
+              marginBottom: '64px',
+              borderRadius: '18px',
+              border: '1px solid var(--border)',
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))',
+              padding: '18px',
+            }}
+          >
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+                gap: '16px',
+              }}
+              className="screenshot-grid"
+            >
+              {screenshots.map((src, index) => (
+                <div
+                  key={src}
+                  style={{
+                    borderRadius: '14px',
+                    border: '1px solid var(--border)',
+                    background: 'var(--bg-card)',
+                    overflow: 'hidden',
+                    minHeight: '220px',
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
+                  }}
+                >
+                  <img
+                    src={src}
+                    alt={`Telex app screenshot ${index + 1}`}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: '12px', fontSize: '12px', color: 'var(--text-muted)' }}>
+              Play Store screenshots
+            </div>
+          </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 280px', gap: '60px', alignItems: 'start' }}>
             <div>
@@ -125,6 +167,7 @@ export default function Telex() {
         @media (max-width: 768px) {
           div[style*="grid-template-columns: 1fr 280px"] { grid-template-columns: 1fr !important; }
           div[style*="grid-template-columns: repeat(4, 1fr)"] { grid-template-columns: repeat(2, 1fr) !important; }
+          .screenshot-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </>

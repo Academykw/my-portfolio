@@ -2,6 +2,12 @@ import Head from 'next/head'
 import Link from 'next/link'
 
 export default function Adkhar() {
+  const screenshots = [
+    'https://play-lh.googleusercontent.com/78eTLL4MiCtHqJi50OdgX9Uq49ZrWQWdg2UVjV2PDt16Rvbz6S90h3cSbdYdwPln9LPd7nT1uT0LVTQ0sJhwzw=w526-h296',
+    'https://play-lh.googleusercontent.com/dIk1DNi8hYtX_O7TllCXRnZm-eQdlKOJiuVnSdecJauR4LOPQvUvZjSwuDJogxWsq5A78UFpk3z2IHA6Kl0W6A=w526-h296',
+    'https://play-lh.googleusercontent.com/NbqQgvW1_vvh98g5PkgdxTyH82AJo-GEwO5ojL-VbHjA4bZxo9Pfsuf7kM_ZijNJzOTWidX7B7bicBrdgrPLcw=w526-h296',
+  ]
+
   return (
     <>
       <Head>
@@ -61,18 +67,52 @@ export default function Adkhar() {
             ))}
           </div>
 
-          {/* Banner using app logo as background */}
-          <div style={{
-            width: '100%',
-            height: '360px',
-            backgroundImage: 'url(/deen-adkar-logo.png)',
-            backgroundSize: 'contain',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-            borderRadius: '12px',
-            border: '1px solid var(--border)',
-            marginBottom: '64px',
-          }}>
+          <div
+            style={{
+              width: '100%',
+              marginBottom: '64px',
+              borderRadius: '18px',
+              border: '1px solid var(--border)',
+              background: 'linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))',
+              padding: '18px',
+            }}
+          >
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+                gap: '16px',
+              }}
+              className="screenshot-grid"
+            >
+              {screenshots.map((src, index) => (
+                <div
+                  key={src}
+                  style={{
+                    borderRadius: '14px',
+                    border: '1px solid var(--border)',
+                    background: 'var(--bg-card)',
+                    overflow: 'hidden',
+                    minHeight: '220px',
+                    boxShadow: '0 20px 50px rgba(0,0,0,0.25)',
+                  }}
+                >
+                  <img
+                    src={src}
+                    alt={`Adkhar app screenshot ${index + 1}`}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+            <div style={{ marginTop: '12px', fontSize: '12px', color: 'var(--text-muted)' }}>
+              Play Store screenshots
+            </div>
           </div>
 
           {/* Content */}
@@ -146,6 +186,7 @@ export default function Adkhar() {
         @media (max-width: 768px) {
           div[style*="grid-template-columns: 1fr 280px"] { grid-template-columns: 1fr !important; }
           div[style*="grid-template-columns: repeat(3, 1fr)"] { grid-template-columns: 1fr !important; }
+          .screenshot-grid { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </>
